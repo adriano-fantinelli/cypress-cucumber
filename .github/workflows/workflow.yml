@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Cypress install
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         with:
           runTests: false
 
@@ -46,9 +46,9 @@ jobs:
     strategy: 
       fail-fast: false
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Cypress run 
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         with: 
           command: npx cypress run --parallel --record --key 00c89c4d-58cf-4965-8e87-09616c006608 --browser ${{github.event.inputs.browser || env.DEFAULT_BROWSER}} --env grep=${{github.event.inputs.tag || env.DEFAULT_TAG}}
 
