@@ -1,0 +1,52 @@
+name: Execution
+
+on:
+  workflow_dispatch:
+    inputs:
+      # amb:
+      #   description: 'Select an environment, for example: dev / hlg / prd'
+      #   required: false
+      #   default: 'hlg'
+      browser:
+        description: 'Select a browser, for example: chrome / electron'
+        required: false
+        default: 'chrome'
+      tag:
+        description: 'Select a tag, for example: @login / @activities / @regression '
+        required: false
+        default: '@regression'
+  pull_request:
+    branches: [ master, release/develop ]
+  # schedule:
+  #  - cron: "0 0 * * *"
+    
+env:
+  # DEFAULT_AMB: "hlg"
+  DEFAULT_BROWSER: "chrome"
+  DEFAULT_TAG: "@regression"
+
+jobs:
+  test:
+    name: Cypress run
+    runs-on: ubuntu-latest
+    container: cypress/browsers:node14.16.0-chrome90-ff88
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cypress run 
+        uses: cypress-io/github-action@v2
+        with: 
+          command: npx cypress run --browser ${{github.event.inputs.browser || env.DEFAULT_BROWSER}} --env grep=${{github.event.inputs.tag || env.DEFAULT_TAG}}
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        with:
+          allure_results: allure-results
+          allure_history: allure-history
+          keep_reports: 20
+      - name: Deploy report to Github Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v2
+        env:
+          PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: allure-history
