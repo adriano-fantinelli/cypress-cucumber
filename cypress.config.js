@@ -1,6 +1,7 @@
 const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
+  projectId: "6azsrs",
   baseUrl: "http://automationpractice.com/index.php?controller=authentication&back=my-account",
   env: {
     activitiesUrl: "http://fakerestapi.azurewebsites.net/api/v1/Activities",

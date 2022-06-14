@@ -26,16 +26,74 @@ env:
   DEFAULT_TAG: "@regression"
 
 jobs:
-  test:
-    name: Cypress run
+  install:
     runs-on: ubuntu-latest
-    container: cypress/browsers:node14.16.0-chrome90-ff88
+    container: cypress/base:16.13.2	
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cypress install
+        uses: cypress-io/github-action@v2
+        with:
+          runTests: false
+
+  cypress-run-1:
+    name: Cypress run 1
+    runs-on: self-hosted
+    container: cypress/base:16.13.2
+    needs: install
+    strategy: 
+      fail-fast: false
     steps:
       - uses: actions/checkout@v2
       - name: Cypress run 
         uses: cypress-io/github-action@v2
         with: 
-          command: npx cypress run --browser ${{github.event.inputs.browser || env.DEFAULT_BROWSER}} --env grep=${{github.event.inputs.tag || env.DEFAULT_TAG}}
+          command: npx cypress run --parallel --record --key 00c89c4d-58cf-4965-8e87-09616c006608 --browser ${{github.event.inputs.browser || env.DEFAULT_BROWSER}} --env grep=${{github.event.inputs.tag || env.DEFAULT_TAG}}
+
+  cypress-run-2:
+    name: Cypress run 2
+    runs-on: self-hosted
+    container: cypress/base:16.13.2
+    needs: install
+    strategy: 
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cypress run 
+        uses: cypress-io/github-action@v2
+        with: 
+          command: npx cypress run --parallel --record --key 00c89c4d-58cf-4965-8e87-09616c006608 --browser ${{github.event.inputs.browser || env.DEFAULT_BROWSER}} --env grep=${{github.event.inputs.tag || env.DEFAULT_TAG}}
+
+  cypress-run-3:
+    name: Cypress run 3
+    runs-on: self-hosted
+    container: cypress/base:16.13.2
+    needs: install
+    strategy: 
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cypress run 
+        uses: cypress-io/github-action@v2
+        with: 
+          command: npx cypress run --parallel --record --key 00c89c4d-58cf-4965-8e87-09616c006608 --browser ${{github.event.inputs.browser || env.DEFAULT_BROWSER}} --env grep=${{github.event.inputs.tag || env.DEFAULT_TAG}}
+          
+  cypress-run-4:
+    name: Cypress run 4
+    runs-on: self-hosted
+    container: cypress/base:16.13.2
+    needs: install
+    strategy: 
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cypress run 
+        uses: cypress-io/github-action@v2
+        with: 
+          command: npx cypress run --parallel --record --key 00c89c4d-58cf-4965-8e87-09616c006608 --browser ${{github.event.inputs.browser || env.DEFAULT_BROWSER}} --env grep=${{github.event.inputs.tag || env.DEFAULT_TAG}}
+
       - name: Generate Allure Report
         uses: simple-elf/allure-report-action@master
         if: always()
@@ -43,6 +101,7 @@ jobs:
           allure_results: allure-results
           allure_history: allure-history
           keep_reports: 20
+          
       - name: Deploy report to Github Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v2
