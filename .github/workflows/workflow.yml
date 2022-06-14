@@ -38,50 +38,8 @@ jobs:
         with:
           runTests: false
 
-  cypress-run-1:
+  cypress-run:
     name: Cypress run 1
-    runs-on: self-hosted
-    container: cypress/base:16.13.2
-    needs: install
-    strategy: 
-      fail-fast: false
-    steps:
-      - uses: actions/checkout@v2
-      - name: Cypress run 
-        uses: cypress-io/github-action@v2
-        with: 
-          command: npx cypress run --parallel --record --key 00c89c4d-58cf-4965-8e87-09616c006608 --browser ${{github.event.inputs.browser || env.DEFAULT_BROWSER}} --env grep=${{github.event.inputs.tag || env.DEFAULT_TAG}}
-
-  cypress-run-2:
-    name: Cypress run 2
-    runs-on: self-hosted
-    container: cypress/base:16.13.2
-    needs: install
-    strategy: 
-      fail-fast: false
-    steps:
-      - uses: actions/checkout@v2
-      - name: Cypress run 
-        uses: cypress-io/github-action@v2
-        with: 
-          command: npx cypress run --parallel --record --key 00c89c4d-58cf-4965-8e87-09616c006608 --browser ${{github.event.inputs.browser || env.DEFAULT_BROWSER}} --env grep=${{github.event.inputs.tag || env.DEFAULT_TAG}}
-
-  cypress-run-3:
-    name: Cypress run 3
-    runs-on: self-hosted
-    container: cypress/base:16.13.2
-    needs: install
-    strategy: 
-      fail-fast: false
-    steps:
-      - uses: actions/checkout@v2
-      - name: Cypress run 
-        uses: cypress-io/github-action@v2
-        with: 
-          command: npx cypress run --parallel --record --key 00c89c4d-58cf-4965-8e87-09616c006608 --browser ${{github.event.inputs.browser || env.DEFAULT_BROWSER}} --env grep=${{github.event.inputs.tag || env.DEFAULT_TAG}}
-          
-  cypress-run-4:
-    name: Cypress run 4
     runs-on: self-hosted
     container: cypress/base:16.13.2
     needs: install
