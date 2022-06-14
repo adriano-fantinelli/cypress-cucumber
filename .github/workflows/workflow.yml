@@ -1,4 +1,4 @@
-name: Execution
+name: Workflow
 
 on:
   workflow_dispatch:
